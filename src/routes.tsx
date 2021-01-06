@@ -14,9 +14,6 @@ export default function Routes() {
                 <Route exact path="/">
                     <Home />
                 </Route>
-                <Route exact path="/wow">
-                    <div>Wow</div>
-                </Route>
             </Switch>
         </Router>
     );
