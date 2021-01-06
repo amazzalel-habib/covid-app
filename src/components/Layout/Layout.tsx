@@ -1,6 +1,7 @@
 import * as React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
+import { Container } from "@material-ui/core";
 
 interface ILayoutProps {
     children: React.ReactElement
@@ -9,7 +10,7 @@ interface ILayoutProps {
 const Layout = ({ children }: ILayoutProps) => {
     return (<div>
         <Header />
-        <div>{children}</div>
+        <Container>{children}</Container>
         <Footer />
     </div>);
 }

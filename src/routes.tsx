@@ -5,16 +5,19 @@ import {
     Route,
 } from "react-router-dom";
 import Home from "./components/Home";
+import Layout from "./components/Layout";
 
 
 export default function Routes() {
     return (
         <Router>
-            <Switch>
-                <Route exact path="/">
-                    <Home />
-                </Route>
-            </Switch>
+            <Layout>
+                <Switch>
+                    <Route exact path="/">
+                        <Home />
+                    </Route>
+                </Switch>
+            </Layout>
         </Router>
     );
 }
