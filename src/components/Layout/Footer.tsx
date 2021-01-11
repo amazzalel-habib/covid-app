@@ -9,8 +9,8 @@ const useStyles = makeStyles({
         fontSize: "14px",
         fontFamily: "Roboto",
         marginTop: "auto",
-        bottom: 0,
-        position: "absolute",
+        //bottom: 0,
+        //position: "absolute",
         width: "100%",
     }
 });

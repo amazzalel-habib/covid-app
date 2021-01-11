@@ -1,14 +1,14 @@
 import { combineReducers } from "redux";
-import { TestState } from "./test-reducer";
-import testReducer from "./test-reducer";
+import { DailyDataState } from "./daily-cases-data-reducer";
+import dailydata from "./daily-cases-data-reducer";
 
 export interface IRootState {
-    readonly test: TestState;
+    readonly dailydata: DailyDataState;
 }
 
 
 const rootReducer = combineReducers<IRootState>({
-    test: testReducer
+    dailydata
 });
 
 export default rootReducer;

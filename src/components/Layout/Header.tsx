@@ -19,6 +19,10 @@ const useDrawerStyles = makeStyles({
 })
 
 const useStyles = makeStyles({
+    header:{
+        backgroundColor: "rgb(32, 33, 36)",
+        boxShadow: '0px 50px 50px #fff'
+    },
     navDisplayFlex: {
         display: `flex`,
         justifyContent: `space-between`
@@ -29,8 +33,8 @@ const useStyles = makeStyles({
     },
     linkText: {
         textDecoration: `none`,
-        textTransform: `capitalize`,
-        color: `#0c066b`,
+        textTransform: `uppercase`,
+        color: `rgba(255,255,255, .87 )`,
         fontFamily: 'Roboto',
         fontWeight: 'bold',
         fontSize: '14px'
@@ -38,7 +42,7 @@ const useStyles = makeStyles({
 });
 
 const navLinks: { title: string, path: string }[] = [
-    { title: `Covid situation`, path: `/covid` },
+    { title: `Covid`, path: `/covid` },
     { title: `about us`, path: `/about-us` },
     { title: `contact`, path: `/contact` },
 ]
@@ -88,7 +92,7 @@ const SideDrawer = () => {
 export default function Header() {
     const classes = useStyles();
     return <header>
-        <AppBar color="default" elevation={0} position="static">
+        <AppBar  className={classes.header}  position="static">
             <Toolbar>
                 <Container className={classes.navbarDisplayFlex}>
                     <IconButton edge="start" color="inherit" aria-label="home">
