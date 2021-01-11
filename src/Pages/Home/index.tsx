@@ -19,7 +19,7 @@ const CustomButton = withStyles({
 })(Button);
 
 export default function Home() {
-    const { data, status, date }: any = useSelector((state: IRootState) => ({
+    const { data, date }: any = useSelector((state: IRootState) => ({
         data: state.dailydata.data,
         date: state.dailydata.date,
         status: state.dailydata.status
