@@ -2,7 +2,6 @@ import React from "react";
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import MapData from "@highcharts/map-collection/custom/british-isles.geo.json"
-
 import { ICovidDailyData } from "../../types";
 
 require("highcharts/modules/map")(Highcharts);
