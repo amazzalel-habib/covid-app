@@ -1,5 +1,5 @@
 export interface ICovidDaily {
-    NewCases: number;
+    NewCases?: number;
     NewDeaths?: number;
     CumCases?: number;
     CumDeaths?: number;

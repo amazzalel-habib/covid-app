@@ -10,4 +10,28 @@ body {
 
 .charttooltip{
   color: #FFF;
+  font-size: 12px;
+}
+
+.mapTooltip{
+  background-color: #333;
+  color: #FDFDFD;
+  padding: 1rem;
+  border-radius: 4px;
+}
+.mapTooltip-name{
+  color: white;
+  font-size: 16px;
+}
+.mapTooltip-value{
+  color: #ffed07;
+}
+
+.mapTooltip-date{
+  color: #EEE;
+  font-size: 14;
+}
+.mapTooltip-note{
+  color: #777;
+  font-size: 10px;
 }

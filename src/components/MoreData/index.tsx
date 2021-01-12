@@ -37,7 +37,6 @@ interface IMoreDataProps {
 const MoreData = ({ regionName, data, changeRange, range, ukData, irelandData }: IMoreDataProps) => {
     const classes = useStyles();
     const latest: ICovidDaily = data && data.length > 0 ? data[0] : DefaultDailly;
-    console.log({ cases: ukData?.timeline?.cases })
     return <Container>
         <Grid container>
             <Grid container item xs={12} justify='center' alignContent='center' alignItems='center'>
@@ -76,7 +75,7 @@ const MoreData = ({ regionName, data, changeRange, range, ukData, irelandData }:
                         </Grid>
                         <Grid container item md={6} xs={12}>
                             <div style={{ marginTop: 50 }}>
-                                <UKAndIrelandChart color={"#33F"} xLabel="Accumulate New Deaths" name="Deaths" irelandData={irelandData.timeline && irelandData.timeline.deaths ? irelandData.timeline.deaths : []} ukData={ukData.timeline && ukData.timeline.deaths ? ukData.timeline.deaths : []} />
+                                <UKAndIrelandChart color={"#F11"} xLabel="Accumulate New Deaths" name="Deaths" irelandData={irelandData.timeline && irelandData.timeline.deaths ? irelandData.timeline.deaths : []} ukData={ukData.timeline && ukData.timeline.deaths ? ukData.timeline.deaths : []} />
                             </div>
                         </Grid>
                         <Grid container item xs={12} style={{ marginTop: 10 }} >
@@ -155,6 +154,26 @@ const MoreData = ({ regionName, data, changeRange, range, ukData, irelandData }:
                         </Typography>
                         <div style={{ width: '100%' }}>
                             <Chart regionName={regionName} range={range} name="Deaths" data={data ? data.map((d) => [d.Date, d.CumDeaths]) : []} />
+                        </div>
+                    </Paper>
+                </Grid>
+                <Grid item md={6} sm={12} >
+                    <Paper variant="elevation" elevation={3} style={{ padding: 10, backgroundColor: '#18181b' }}>
+                        <Typography style={{ padding: 4, color: '#FFF', fontSize: 14, fontFamily: 'Roboto', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: 10 }}>
+                            {"Recovered over time (14 days) in "} <span style={{ color: "rgb(253 241 95)", fontWeight: 'bold' }}>{regionName}</span>
+                        </Typography>
+                        <div style={{ width: '100%' }}>
+                            <Chart regionName={regionName} range={range} name="Recovered" data={data ? data.map((d) => [d.Date, d.Recovered]) : []} />
+                        </div>
+                    </Paper>
+                </Grid>
+                <Grid item md={6} sm={12} >
+                    <Paper variant="elevation" elevation={3} style={{ padding: 10, backgroundColor: '#18181b' }}>
+                        <Typography style={{ padding: 4, color: '#FFF', fontSize: 14, fontFamily: 'Roboto', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: 10 }}>
+                            {"Active cases over time (14 days) in "} <span style={{ color: "rgb(253 241 95)", fontWeight: 'bold' }}>{regionName}</span>
+                        </Typography>
+                        <div style={{ width: '100%' }}>
+                            <Chart regionName={regionName} range={range} name="Active Cases" data={data ? data.map((d) => [d.Date, d.ActiveCases]) : []} />
                         </div>
                     </Paper>
                 </Grid>

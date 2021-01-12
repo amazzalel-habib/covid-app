@@ -1,4 +1,4 @@
-import { fetchUKDailyData } from "../../api";
+import { fetchDailyData } from "../../api";
 import { YesterDay } from "../../constants";
 import { FAILURE, REQUEST, SUCCESS } from "./action-type.util";
 
@@ -50,7 +50,7 @@ export const fetchDailyDataAction = (date: Date) => async (dispatch: any, getSta
         type: REQUEST(ACTION_TYPES.FetchDailyData),
     });
     try {
-        const data = await fetchUKDailyData(date);
+        const data = await fetchDailyData(date);
         dispatch({
             type: SUCCESS(ACTION_TYPES.FetchDailyData),
             payload: { data: data },

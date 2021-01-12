@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CustomButton from "../../components/CustomButton";
 import MapCases from "../../components/MapCases";
 import MoreData from "../../components/MoreData";
-import { Days2Ago, Days3Ago, YesterDay } from "../../constants";
+import { Days2Ago, Today, YesterDay } from "../../constants";
 import { IRootState } from "../../store/reducers";
 import { fetchAllDataAction } from "../../store/reducers/all-data-reduce";
 import { changeDailyDate, fetchDailyDataAction } from "../../store/reducers/daily-cases-data-reducer";
@@ -52,14 +52,14 @@ export default function Home() {
     return <Grid container>
         <div style={{ position: 'absolute', zIndex: 1, padding: 4, color: "#ccc", margin: 8 }} >
             <ButtonGroup color="inherit" variant="text" size="small">
-                <CustomButton disabled={date === Days3Ago} color="inherit" onClick={() => changeDate(Days3Ago)} size="small">
-                    {"Last 3 days"}
-                </CustomButton>
                 <CustomButton disabled={date === Days2Ago} color="inherit" onClick={() => changeDate(Days2Ago)} size="small">
                     {"Last 2 days"}
                 </CustomButton>
                 <CustomButton disabled={date === YesterDay} color="inherit" onClick={() => changeDate(YesterDay)} size="small">
                     {"Yesterday"}
+                </CustomButton>
+                <CustomButton disabled={date === Today} color="inherit" onClick={() => changeDate(Today)} size="small">
+                    {"Today"}
                 </CustomButton>
             </ButtonGroup>
         </div>

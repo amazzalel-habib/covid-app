@@ -2,22 +2,29 @@ import React from "react";
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import MapData from "@highcharts/map-collection/custom/british-isles.geo.json"
-import { ICovidDailyData } from "../../types";
+import { ICovidDaily, ICovidDailyData } from "../../types";
+import moment from "moment";
 
 require("highcharts/modules/map")(Highcharts);
 
+function formatOnEmpty(value?: number): string {
+    if (value && value > 0) {
+        return `${value}`;
+    }
+    return "#";
+}
 const getOptions = (data, onSelect): Highcharts.Options | {} => {
     const series: Array<Highcharts.SeriesOptionsType | {}> = [
         {
             name: 'Countries',
             showInLegend: false,
             data: [
-                { 'hc-key': 'gb-eng',id: 'gb-eng', color: '#222', z: 'gb-eng' },
-                { 'hc-key': 'gb-wls',id: 'gb-wls', color: '#222', z: 'gb-wls' },
-                { 'hc-key': 'gb-sct',id: 'gb-sct', color: '#222', z: 'gb-sct' },
-                { 'hc-key': 'gb-nir',id: 'gb-nir', color: '#222', z: 'gb-nir' },
-                { 'hc-key': 'ie-irl',id: 'ie-irl', color: '#222', z: 'ie-irl' },
-                { 'hc-key': 'gb-imn',id: 'gb-imn', color: '#222', z: 'gb-imn' },
+                { 'hc-key': 'gb-eng', id: 'gb-eng', color: '#222', z: 'gb-eng' },
+                { 'hc-key': 'gb-wls', id: 'gb-wls', color: '#222', z: 'gb-wls' },
+                { 'hc-key': 'gb-sct', id: 'gb-sct', color: '#222', z: 'gb-sct' },
+                { 'hc-key': 'gb-nir', id: 'gb-nir', color: '#222', z: 'gb-nir' },
+                { 'hc-key': 'ie-irl', id: 'ie-irl', color: '#222', z: 'ie-irl' },
+                { 'hc-key': 'gb-imn', id: 'gb-imn', color: '#222', z: 'gb-imn' },
             ],
             enableMouseTracking: false
 
@@ -57,9 +64,6 @@ const getOptions = (data, onSelect): Highcharts.Options | {} => {
                 }
             },
             joinBy: ['hc-key', 'hc-key'],
-            tooltip: {
-                pointFormat: '{point.properties.name}: {point.z}  new cases'
-            }
         },
     ]
     return {
@@ -80,6 +84,33 @@ const getOptions = (data, onSelect): Highcharts.Options | {} => {
         },
         title: {
             text: ''
+        },
+        tooltip: {
+            crosshairs: [false],
+            backgroundColor: null,
+            borderColor: null,
+            borderWidth: 0,
+            shadow: true,
+            outside: true,
+            distance: 30,
+            useHTML: true,
+            shape: 'square',
+            formatter() {
+                const { point } = this;
+                const data: ICovidDaily = (point as any).data;
+                return `<div class='mapTooltip'>
+                <div class='mapTooltip-name'>${point.name}:</div> <ul>
+                <li><span class='mapTooltip-value'>${formatOnEmpty(data.ActiveCases)}</span> <b>Active Cases</b></li>
+                <li><span class='mapTooltip-value'>${formatOnEmpty(data.CumCases)}</span> <b>Cases</b></li>
+                <li><span class='mapTooltip-value'>${formatOnEmpty(data.NewCases)}</span> <b>New Cases</b></li>
+                <li><span class='mapTooltip-value'>${formatOnEmpty(data.CumDeaths)}</span> <b>Deaths</b></li>
+                <li><span class='mapTooltip-value'>${formatOnEmpty(data.NewDeaths)}</span> <b>New Deaths</b></li>
+                <li><span class='mapTooltip-value'>${formatOnEmpty(data.Recovered)}</span> <b>Recovered</b></li>
+                </ul>
+                <div class='mapTooltip-date'>${moment(data.Date).format("DD MMM YYYY")}</div>
+                <div class='mapTooltip-note'># = Data not available</div>
+                </div>`;
+            }
         },
         mapNavigation: {
             enabled: true,
@@ -106,11 +137,11 @@ interface IMapCasesProps {
 const MapCases = ({ data, onChangeSelectedRegion }: IMapCasesProps) => {
 
     var statsData = data && [
-        { 'hc-key': 'gb-eng', z: data.eng.ActiveCases, data: data.eng, id: 'gb-eng' },
-        { 'hc-key': 'gb-wls', z: data.wls.ActiveCases, data: data.wls, id: 'gb-wls' },
-        { 'hc-key': 'gb-sct', z: data.sct.ActiveCases, data: data.sct, id: 'gb-sct' },
-        { 'hc-key': 'gb-nir', z: data.nir.ActiveCases, data: data.nir, id: 'gb-nir' },
-        { 'hc-key': 'ie-irl', z: data.irl.ActiveCases, data: data.irl, id: 'ie-irl' }
+        { 'hc-key': 'gb-eng', z: data.eng.CumCases, data: data.eng, id: 'gb-eng' },
+        { 'hc-key': 'gb-wls', z: data.wls.CumCases, data: data.wls, id: 'gb-wls' },
+        { 'hc-key': 'gb-sct', z: data.sct.CumCases, data: data.sct, id: 'gb-sct' },
+        { 'hc-key': 'gb-nir', z: data.nir.CumCases, data: data.nir, id: 'gb-nir' },
+        { 'hc-key': 'ie-irl', z: data.irl.CumCases, data: data.irl, id: 'ie-irl' }
     ];
     return <div style={{ width: '100%', margin: 0, padding: 0, }}>
         <HighchartsReact
