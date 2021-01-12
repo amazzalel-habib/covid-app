@@ -64,7 +64,7 @@ const Chart = ({ data, name, range, xLabel, title }: IChartProps) => {
             }
         },
         series: [{
-            type: range === "all" ? 'line' : 'spline',
+            type: 'line',
             color: 'rgb(200,200,0)',
             name,
             lineWidth: 1,
