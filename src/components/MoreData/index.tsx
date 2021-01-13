@@ -9,11 +9,18 @@ import Chart from './Chart';
 import UKAndIrelandChart from './UKAndIrelandChart';
 
 const useStyles = makeStyles({
+    overviewBox: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignContent: 'center',
+        alignItems: 'center',
+        padding: 4,
+    },
     label: {
         color: "#DDD",
         fontSize: 16,
         textAlign: 'center',
-        marginBottom: 4
+        marginBottom: 16
     },
     value: {
         color: "#ffed07",
@@ -40,7 +47,7 @@ const MoreData = ({ regionName, data, changeRange, range, ukData, irelandData }:
     return <Container>
         <Grid container>
             <Grid container item xs={12} justify='center' alignContent='center' alignItems='center'>
-                <Paper variant="elevation" elevation={3} style={{ position: 'relative', top: -35, padding: 10, backgroundColor: '#18181b' }}>
+                <Paper variant="elevation" elevation={3} style={{ position: 'relative', top: -35, padding: 10, backgroundColor: '#18181b', margin: '0 auto' }}>
                     <Grid container justify='center' alignContent='center' alignItems='center'>
                         <Grid container item xs={12} justify='center' alignContent='center' alignItems='center'>
                             <Typography style={{ padding: 4, color: '#FFF', fontSize: 20, fontFamily: 'Roboto', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: 10 }}>
@@ -52,33 +59,34 @@ const MoreData = ({ regionName, data, changeRange, range, ukData, irelandData }:
                                 Last updated: {moment(ukData?.updated).fromNow()}
                             </div>
                         </Grid>
-                        <Grid item md={3} sm={6} xs={12}>
-                            <div className={classes.label}>Total cases</div>
-                            <div className={classes.value}>{ukData?.cases + irelandData?.cases}</div>
+                        <Grid container item xs={12} justify='center' alignContent='center'>
+                            <Grid className={classes.overviewBox} container justify='center' item md={2} sm={6} xs={12} style={{ borderRight: '1px solid #555' }}>
+                                <div className={classes.label}>Active Cases</div>
+                                <div className={classes.value}>{ukData?.active + irelandData?.active}</div>
+                            </Grid>
+                            <Grid className={classes.overviewBox} item md={2} sm={6} xs={12} style={{ borderRight: '1px solid #555' }}>
+                                <div className={classes.label}>Total cases</div>
+                                <div className={classes.value}>{ukData?.cases + irelandData?.cases}</div>
+                                <div>
+                                    <UKAndIrelandChart color={"#F11"} xLabel="Accumulate new cases" name="Cases" irelandData={irelandData.timeline && irelandData.timeline.cases ? irelandData.timeline.cases : []} ukData={ukData.timeline && ukData.timeline.cases ? ukData.timeline.cases : []} />
+                                </div>
+                            </Grid>
+                            <Grid className={classes.overviewBox} item md={2} sm={6} xs={12} style={{ borderRight: '1px solid #555' }}>
+                                <div className={classes.label}>Deaths</div>
+                                <div className={classes.value}>{ukData?.deaths + irelandData?.deaths}</div>
+                                <div>
+                                    <UKAndIrelandChart color={"#F11"} xLabel="Accumulate New Deaths" name="Deaths" irelandData={irelandData.timeline && irelandData.timeline.deaths ? irelandData.timeline.deaths : []} ukData={ukData.timeline && ukData.timeline.deaths ? ukData.timeline.deaths : []} />
+                                </div>
+                            </Grid>
+                            <Grid className={classes.overviewBox} item md={2} sm={6} xs={12}>
+                                <div className={classes.label}>Recovered</div>
+                                <div className={classes.value}>{ukData?.recovered + irelandData?.recovered}</div>
+                                <div>
+                                    <UKAndIrelandChart color={"#1F1"} xLabel="Recovered" name="Recovered" irelandData={irelandData.timeline && irelandData.timeline.recovered ? irelandData.timeline.recovered : []} ukData={ukData.timeline && ukData.timeline.recovered ? ukData.timeline.recovered : []} />
+                                </div>
+                            </Grid>
                         </Grid>
-                        <Grid item md={3} sm={6} xs={12}>
-                            <div className={classes.label}>Active</div>
-                            <div className={classes.value}>{ukData?.active + irelandData?.active}</div>
-                        </Grid>
-                        <Grid item md={3} sm={6} xs={12}>
-                            <div className={classes.label}>Deaths</div>
-                            <div className={classes.value}>{ukData?.deaths + irelandData?.deaths}</div>
-                        </Grid>
-                        <Grid item md={3} sm={6} xs={12}>
-                            <div className={classes.label}>Recovered</div>
-                            <div className={classes.value}>{ukData?.recovered + irelandData?.recovered}</div>
-                        </Grid>
-                        <Grid container item md={6} xs={12}>
-                            <div style={{ marginTop: 50 }}>
-                                <UKAndIrelandChart xLabel="Accumulate new cases" name="Cases" irelandData={irelandData.timeline && irelandData.timeline.cases ? irelandData.timeline.cases : []} ukData={ukData.timeline && ukData.timeline.cases ? ukData.timeline.cases : []} />
-                            </div>
-                        </Grid>
-                        <Grid container item md={6} xs={12}>
-                            <div style={{ marginTop: 50 }}>
-                                <UKAndIrelandChart color={"#F11"} xLabel="Accumulate New Deaths" name="Deaths" irelandData={irelandData.timeline && irelandData.timeline.deaths ? irelandData.timeline.deaths : []} ukData={ukData.timeline && ukData.timeline.deaths ? ukData.timeline.deaths : []} />
-                            </div>
-                        </Grid>
-                        <Grid container item xs={12} style={{ marginTop: 10 }} >
+                        <Grid container item xs={12} style={{ marginTop: 10 }} justify='center' alignContent='center' >
                             <Link style={{ color: "#444", textTransform: 'uppercase' }} to="/uk-ireland">See more stats for UK & ireland</Link>
                         </Grid>
                     </Grid>
@@ -92,21 +100,21 @@ const MoreData = ({ regionName, data, changeRange, range, ukData, irelandData }:
                     <span style={{ color: '#555', fontSize: 12, position: 'relative', top: -20 }}>{"＊ To change the region click on another one in the map"}</span>
                     <br />
                 </Grid>
-                <Grid item md={3} sm={6} xs={12}>
+                <Grid item md={3} sm={6} xs={12} style={{ borderRight: '1px solid #555' }}>
                     <div className={classes.label}>Total cases</div>
                     <div className={classes.value}>{latest.CumCases}</div>
                 </Grid>
-                <Grid item md={3} sm={6} xs={12}>
+                <Grid item md={3} sm={6} xs={12} style={{ borderRight: '1px solid #555' }}>
                     <div className={classes.label}>Active</div>
                     <div className={classes.value}>{latest.ActiveCases}</div>
                 </Grid>
-                <Grid item md={3} sm={6} xs={12}>
+                <Grid item md={3} sm={6} xs={12} style={{ borderRight: '1px solid #555' }}>
                     <div className={classes.label}>Deaths</div>
-                    <div className={classes.value}>{latest.CumDeaths}</div>
+                    <div className={classes.value}>{latest.CumDeaths ? latest.CumDeaths : '#'}</div>
                 </Grid>
                 <Grid item md={3} sm={6} xs={12}>
                     <div className={classes.label}>Recovered</div>
-                    <div className={classes.value}>{latest.Recovered}</div>
+                    <div className={classes.value}>{latest.Recovered ? latest.Recovered : '#'}</div>
                 </Grid>
             </Grid>
             <Grid container justify='center' alignContent='center' alignItems='center' spacing={4}>

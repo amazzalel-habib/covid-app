@@ -32,26 +32,27 @@ const UKAndIrelandChart = ({ irelandData, ukData, name, xLabel, title, color }: 
         caption: title,
         chart: {
             backgroundColor: "none",
-            height: "230px",
-            borderWidth: 1,
+            height: "90px",
+            width: 160,
+            type: 'area',
+            borderWidth: 0,
             borderColor: "#333",
-            width: null
         },
         credits: {
             enabled: false
         },
         legend: {
-            enabled: true,
+            enabled: false,
         },
         xAxis: {
-            visible: true,
+            visible: false,
             type: 'datetime',
             width: "100%",
             gridLineWidth: 0,
 
         },
         yAxis: {
-            visible: true,
+            visible: false,
             gridLineWidth: 0,
             title: {
                 text: xLabel,
@@ -85,9 +86,10 @@ const UKAndIrelandChart = ({ irelandData, ukData, name, xLabel, title, color }: 
             }
         },
         series: [{
-            type: 'spline',
+            type: 'area',
             color: color ? color : 'rgb(200,200,0)',
-            lineWidth: 1,
+            lineWidth: 2,
+            fillOpacity: 0.2,
             marker: {
                 enabled: false,
             },
