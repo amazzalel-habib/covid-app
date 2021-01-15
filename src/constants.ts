@@ -16,4 +16,7 @@ export const DefaultDailly: ICovidDaily = {
     CumDeaths: 0,
     NewDeaths: 0,
     Recovered: 0,
+    AreaCode: '',
+    AreaName: '',
+    AreaType: '',
 }

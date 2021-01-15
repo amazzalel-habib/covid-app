@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import Home from "./Pages/Home";
 import Layout from "./components/Layout";
+import Regions from "./Pages/Regions";
 
 
 export default function Routes() {
@@ -15,6 +16,9 @@ export default function Routes() {
                 <Switch>
                     <Route exact path="/">
                         <Home />
+                    </Route>
+                    <Route exact path="/regions">
+                        <Regions />
                     </Route>
                 </Switch>
             </Layout>

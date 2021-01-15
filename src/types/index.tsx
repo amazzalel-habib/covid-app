@@ -1,27 +1,41 @@
 export interface ICovidDaily {
-    NewCases?: number;
-    NewDeaths?: number;
-    CumCases?: number;
-    CumDeaths?: number;
-    ActiveCases?: number;
-    Recovered?: number;
+    NewCases?: number | null;
+    NewDeaths?: number | null;
+    CumCases?: number | null;
+    CumDeaths?: number | null;
+    ActiveCases?: number | null;
+    Recovered?: number | null;
     Date: number;
+    AreaType: string,
+    AreaName: string,
+    AreaCode: string,
+    CumCasesBySpecimenDateRate?: number | null,
+    CumCasesBySpecimenDate?: number | null,
+    NewCasesBySpecimenDate?: number | null,
+    CumTestsByPublishDate?: number | null,
+    HospitalCases?: number | null,
+    NewTestsByPublishDate?: number | null,
+    CovidOccupiedMVBeds?: number | null,
+    PlannedCapacityByPublishDate?: number | null,
+    NewDeaths28DaysByPublishDate?: number | null,
+    CumDeaths28DaysByPublishDate?: number | null,
+    CumDeaths28DaysByPublishDateRate?: number | null,
+    NewDeaths28DaysByDeathDate?: number | null,
+    CumDeaths28DaysByDeathDate?: number | null,
+    CumDeaths28DaysByDeathDateRate?: number | null
 }
 
-
-export interface ICovidDailyData {
-    eng: ICovidDaily;
-    wls: ICovidDaily;
-    sct: ICovidDaily;
-    nir: ICovidDaily;
-    irl: ICovidDaily;
+export interface ICovidRegionsDailyData {
+    [regionName: string]: ICovidDaily[] | null;
+}
+export interface ICovidRegionsDailyDataByDate {
+    [regionName: string]: ICovidDaily | null;
 }
 
-export interface UKAndIrelandData {
-    ireland: IAllData;
-    uk: IAllData;
+export interface ICountriesData {
+    [countryName: string]: ICountryData;
 }
-export interface IAllData {
+export interface ICountryData {
     updated: number;
     cases: number;
     todayCases: number;
@@ -48,4 +62,33 @@ export interface IAllData {
         deaths: [number, number][];
         recovered: [number, number][];
     }
+}
+
+export interface IUKData {
+    areaType: string,
+    areaName: string,
+    date: string,
+    areaCode: string,
+    newCasesByPublishDate: number | null,
+    cumCasesByPublishDate: number | null,
+    cumDeathsByDeathDate: number | null,
+    newDeathsByDeathDate: number | null,
+    cumCasesBySpecimenDateRate: number | null,
+    cumCasesBySpecimenDate: number | null,
+    newCasesBySpecimenDate: number | null,
+    maleCases: number | null,
+    femaleCases: number | null,
+    newAdmissions: number | null,
+    cumAdmissions: number | null,
+    cumTestsByPublishDate: number | null,
+    hospitalCases: number | null,
+    newTestsByPublishDate: number | null,
+    covidOccupiedMVBeds: number | null,
+    plannedCapacityByPublishDate: number | null,
+    newDeaths28DaysByPublishDate: number | null,
+    cumDeaths28DaysByPublishDate: number | null,
+    cumDeaths28DaysByPublishDateRate: number | null,
+    newDeaths28DaysByDeathDate: number | null,
+    cumDeaths28DaysByDeathDate: number | null,
+    cumDeaths28DaysByDeathDateRate: number | null
 }

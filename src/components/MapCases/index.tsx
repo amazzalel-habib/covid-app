@@ -2,12 +2,13 @@ import React from "react";
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import MapData from "@highcharts/map-collection/custom/british-isles.geo.json"
-import { ICovidDaily, ICovidDailyData } from "../../types";
+import { ICovidDaily, ICovidRegionsDailyData } from "../../types";
 import moment from "moment";
+import { DefaultDailly } from "../../constants";
 
 require("highcharts/modules/map")(Highcharts);
 
-function formatOnEmpty(value?: number): string {
+function formatOnEmpty(value?: number | null): string {
     if (value && value > 0) {
         return `${value}`;
     }
@@ -17,20 +18,13 @@ const getOptions = (data, onSelect): Highcharts.Options | {} => {
     const series: Array<Highcharts.SeriesOptionsType | {}> = [
         {
             name: 'Countries',
+            data: data && data.map((d) => ({ color: "#222", regionName: d.regionName })),
             showInLegend: false,
-            data: [
-                { 'hc-key': 'gb-eng', id: 'gb-eng', color: '#222', z: 'gb-eng' },
-                { 'hc-key': 'gb-wls', id: 'gb-wls', color: '#222', z: 'gb-wls' },
-                { 'hc-key': 'gb-sct', id: 'gb-sct', color: '#222', z: 'gb-sct' },
-                { 'hc-key': 'gb-nir', id: 'gb-nir', color: '#222', z: 'gb-nir' },
-                { 'hc-key': 'ie-irl', id: 'ie-irl', color: '#222', z: 'ie-irl' },
-                { 'hc-key': 'gb-imn', id: 'gb-imn', color: '#222', z: 'gb-imn' },
-            ],
+            joinBy: ['name', 'regionName'],
             enableMouseTracking: false
-
         },
         {
-            data: data,
+            data,
             type: "mapbubble",
             name: 'Covid19 daily cases',
             borderWidth: 0,
@@ -63,7 +57,7 @@ const getOptions = (data, onSelect): Highcharts.Options | {} => {
                     }
                 }
             },
-            joinBy: ['hc-key', 'hc-key'],
+            joinBy: ['name', 'regionName'],
         },
     ]
     return {
@@ -131,18 +125,21 @@ const getOptions = (data, onSelect): Highcharts.Options | {} => {
 }
 
 interface IMapCasesProps {
-    data: ICovidDailyData;
+    data: ICovidRegionsDailyData;
     onChangeSelectedRegion: any;
+    dateIndex: number;
 }
-const MapCases = ({ data, onChangeSelectedRegion }: IMapCasesProps) => {
-
-    var statsData = data && [
-        { 'hc-key': 'gb-eng', z: data.eng.CumCases, data: data.eng, id: 'gb-eng' },
-        { 'hc-key': 'gb-wls', z: data.wls.CumCases, data: data.wls, id: 'gb-wls' },
-        { 'hc-key': 'gb-sct', z: data.sct.CumCases, data: data.sct, id: 'gb-sct' },
-        { 'hc-key': 'gb-nir', z: data.nir.CumCases, data: data.nir, id: 'gb-nir' },
-        { 'hc-key': 'ie-irl', z: data.irl.CumCases, data: data.irl, id: 'ie-irl' }
-    ];
+const MapCases = ({ data, onChangeSelectedRegion, dateIndex }: IMapCasesProps) => {
+    const statsData: { regionName: string, z: number | null, data: ICovidDaily, id: string }[] = [];
+    for (const [regionName, list] of Object.entries(data)) { 
+        const currentElement: ICovidDaily = list && list.length > dateIndex ? list[dateIndex] :( DefaultDailly);
+        statsData.push({
+            regionName: regionName,
+            z: currentElement.CumCases || null,
+            data: currentElement,
+            id: regionName,
+        })
+    }
     return <div style={{ width: '100%', margin: 0, padding: 0, }}>
         <HighchartsReact
             highcharts={Highcharts}

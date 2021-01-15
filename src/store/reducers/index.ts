@@ -1,22 +1,22 @@
 import { combineReducers } from "redux";
-import { DailyDataState } from "./daily-cases-data-reducer";
-import dailydata from "./daily-cases-data-reducer";
-import { DailyDataForRegionState } from "./data-region-reduce";
-import regionDailyData from "./data-region-reduce";
-import { AllDataState } from "./all-data-reduce";
-import UKAndIrelandData from "./all-data-reduce";
+import { NationDataState } from "./nation-data-reducer";
+import nationData from "./nation-data-reducer";
+import { RegionDataState } from "./region-data-reduce";
+import regionData from "./region-data-reduce";
+import { CountryDataState } from "./country-data-reduce";
+import countryData from "./country-data-reduce";
 
 export interface IRootState {
-    readonly dailydata: DailyDataState;
-    readonly regionDailyData: DailyDataForRegionState;
-    readonly UKAndIrelandData: AllDataState;
+    readonly nationData: NationDataState;
+    readonly regionData: RegionDataState;
+    readonly countryData: CountryDataState;
 }
 
 
 const rootReducer = combineReducers<IRootState>({
-    dailydata,
-    regionDailyData,
-    UKAndIrelandData
+    nationData,
+    regionData,
+    countryData
 });
 
 export default rootReducer;

@@ -6,49 +6,46 @@ import MapCases from "../../components/MapCases";
 import MoreData from "../../components/MoreData";
 import { Days2Ago, Today, YesterDay } from "../../constants";
 import { IRootState } from "../../store/reducers";
-import { fetchAllDataAction } from "../../store/reducers/all-data-reduce";
-import { changeDailyDate, fetchDailyDataAction } from "../../store/reducers/daily-cases-data-reducer";
-import { fetchDailyDataForRegionAction } from "../../store/reducers/data-region-reduce";
+import { fetchCoubtriesDataAction } from "../../store/reducers/country-data-reduce";
+import { changeDailyDateAction, fetchNationsDailyDataAction } from "../../store/reducers/nation-data-reducer";
+import { ICountryData, ICovidRegionsDailyData } from "../../types";
 
 
 export default function Home() {
-    const { data, date, regionData, ireland, uk }: any = useSelector((state: IRootState) => ({
-        data: state.dailydata.data,
-        date: state.dailydata.date,
-        status: state.dailydata.status,
-        regionData: state.regionDailyData.data,
-        ireland: state.UKAndIrelandData.ireland,
-        uk: state.UKAndIrelandData.uk,
+    const { nationData, ireland, uk, date }: { nationData: ICovidRegionsDailyData, ireland: ICountryData, uk: ICountryData, date: Date } = useSelector((state: IRootState) => ({
+        nationData: state.nationData.data,
+        date: state.nationData.date,
+        ireland: state.countryData?.data["ireland"],
+        uk: state.countryData?.data["uk"],
     }))
-    const [selectedRegion, setSelectedRegion] = useState<string>("England");
+    const [selectedNation, setSelectedNation] = useState<string>("England");
     const [range, setRange] = useState<string | number>(14);
     const onChangeSelect = (newSelect) => {
-        if (newSelect === selectedRegion) {
-            setSelectedRegion("England");
+        if (newSelect === selectedNation) {
+            setSelectedNation("England");
         } else {
-            setSelectedRegion(newSelect);
+            setSelectedNation(newSelect);
         }
     }
     const changeDate = (newDate: Date) => {
-        dispatch(changeDailyDate(newDate));
+        dispatch(changeDailyDateAction(newDate));
     }
     const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(fetchDailyDataAction(date))
-    }, [dispatch, date]);
-    useEffect(() => {
-        dispatch(fetchDailyDataForRegionAction(selectedRegion));
-    }, [dispatch, selectedRegion]);
-    useEffect(() => {
-        dispatch(fetchAllDataAction(true));
-    }, [dispatch]);
-    const regionDataSplited = useMemo(() => {
-        if (range === "all") {
-            return regionData;
-        }
-        return regionData && regionData.length > 0 ? regionData.slice(0, range) : [];
 
-    }, [range, regionData]);
+    useEffect(() => {
+        dispatch(fetchCoubtriesDataAction());
+        dispatch(fetchNationsDailyDataAction());
+    }, [dispatch]);
+    const selectedNationData = nationData[selectedNation];
+    const nationDataSplited = useMemo(() => {
+        if (range === "all") {
+            return selectedNationData;
+        }
+        const r: number = Number.parseInt(`${range}`);
+        return selectedNationData && selectedNationData.length > 0 ? selectedNationData.slice(0, r) : [];
+
+    }, [range, selectedNationData]);
+    const dateIndex = date === Days2Ago ? 2 : (date === YesterDay ? 1 : 0)
     return <Grid container>
         <div style={{ position: 'absolute', zIndex: 1, padding: 4, color: "#ccc", margin: 8 }} >
             <ButtonGroup color="inherit" variant="text" size="small">
@@ -63,9 +60,9 @@ export default function Home() {
                 </CustomButton>
             </ButtonGroup>
         </div>
-        <MapCases onChangeSelectedRegion={onChangeSelect} data={data} />
+        <MapCases dateIndex={dateIndex} onChangeSelectedRegion={onChangeSelect} data={nationData} />
         <div style={{ backgroundColor: '#1f2124', width: '100%', padding: '1rem' }}>
-            <MoreData irelandData={ireland} ukData={uk} changeRange={setRange} regionName={selectedRegion} range={range} data={regionDataSplited} />
+            <MoreData changeDate={changeDate} irelandData={ireland} dateIndex={dateIndex}  ukData={uk} changeRange={setRange} regionName={selectedNation} range={range} data={nationDataSplited} />
         </div>
     </Grid>
 }

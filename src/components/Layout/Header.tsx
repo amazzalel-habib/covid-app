@@ -19,7 +19,7 @@ const useDrawerStyles = makeStyles({
 })
 
 const useStyles = makeStyles({
-    header:{
+    header: {
         backgroundColor: "rgb(32, 33, 36)",
         boxShadow: '0px 50px 50px #fff'
     },
@@ -42,9 +42,10 @@ const useStyles = makeStyles({
 });
 
 const navLinks: { title: string, path: string }[] = [
-    { title: `Covid`, path: `/covid` },
-    { title: `about us`, path: `/about-us` },
-    { title: `contact`, path: `/contact` },
+    { title: `Covid In UK and Ireland`, path: `/` },
+    { title: `UK Regions`, path: `/regions` },
+    { title: `about us`, path: `/` },
+    { title: `contact`, path: `/` },
 ]
 
 const SideDrawer = () => {
@@ -65,11 +66,11 @@ const SideDrawer = () => {
         >
             <List component="nav">
                 {navLinks.map(({ title, path }) => (
-                    <a href={path} key={title} className={classes.linkText}>
+                    <Link to={path} key={title} className={classes.linkText}>
                         <ListItem className={classes.linkText}>
                             {title}
                         </ListItem>
-                    </a>
+                    </Link>
                 ))}
             </List>
         </div>
@@ -92,7 +93,7 @@ const SideDrawer = () => {
 export default function Header() {
     const classes = useStyles();
     return <header>
-        <AppBar  className={classes.header}  position="static">
+        <AppBar className={classes.header} position="static">
             <Toolbar>
                 <Container className={classes.navbarDisplayFlex}>
                     <IconButton edge="start" color="inherit" aria-label="home">
