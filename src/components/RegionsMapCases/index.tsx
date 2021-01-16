@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
-import MapData from "../../utla-geojson.json";
 import { ICovidRegionsDailyDataByDate } from "../../types";
 import moment from "moment";
+import Loader from "../loader";
 
 require("highcharts/modules/map")(Highcharts);
 
@@ -13,11 +13,11 @@ function formatOnEmpty(value?: number | null): string {
     }
     return "#";
 }
-const getOptions = (data, onSelect): Highcharts.Options | {} => {
+const getOptions = (data, onSelect, mapData): Highcharts.Options | {} => {
     const series: Array<Highcharts.SeriesOptionsType | {}> = [
         {
             data,
-            mapData: MapData,
+            mapData,
             type: "map",
             name: 'Covid19 daily cases',
             cursor: 'pointer',
@@ -170,6 +170,7 @@ interface IMapCasesProps {
 
 const RegionsMapCases = ({ data, onChangeSelectedRegion, status }: IMapCasesProps) => {
     const chartRef = useRef(null);
+    const [mapData, setMapData] = useState<any>(null);
     const statsData = useMemo(() => {
         const dataMapped: {}[] = [];
         for (const [regionName, d] of Object.entries(data)) {
@@ -189,19 +190,26 @@ const RegionsMapCases = ({ data, onChangeSelectedRegion, status }: IMapCasesProp
     }, [data]);
     useEffect(() => {
         const chart: any = chartRef?.current;
-        if (status !== 'success') {
+        if (status !== 'success' && chart?.chart) {
             chart.chart.showLoading();
-        } else {
+        } else if (chart?.chart) {
             chart.chart.hideLoading();
         }
-    }, [status])
-    return <div style={{ width: '100%', margin: 0, padding: 0, }}>
-        <HighchartsReact
+    }, [status]);
+    useEffect(() => {
+        (async function () {
+            const mapD = await import('../../utla-geojson.json');
+            setMapData(mapD.default);
+        })();
+    }, []);
+    return <div style={{ width: '100%', margin: 0, padding: 0, minHeight: 500 }}>
+        <Loader status={mapData ? 'success' : 'loading'}>
+            <HighchartsReact
             highcharts={Highcharts}
-            options={getOptions(statsData, onChangeSelectedRegion)}
+            options={getOptions(statsData, onChangeSelectedRegion, mapData)}
             constructorType={'mapChart'}
             ref={chartRef}
-        />
+        /></Loader>
     </div>
 }
 
