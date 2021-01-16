@@ -21,7 +21,6 @@ const useDrawerStyles = makeStyles({
 const useStyles = makeStyles({
     header: {
         backgroundColor: "rgb(32, 33, 36)",
-        boxShadow: '0px 50px 50px #fff'
     },
     navDisplayFlex: {
         display: `flex`,

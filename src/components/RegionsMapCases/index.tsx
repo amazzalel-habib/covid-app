@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import MapData from "../../utla-geojson.json";
@@ -24,9 +24,9 @@ const getOptions = (data, onSelect): Highcharts.Options | {} => {
             minSize: "5%",
             maxSize: "10%",
             allowPointSelect: true,
-            borderWidth:1,
-            borderColor:"#FFF",
-            color:  `rgb(200, 200,200)`,
+            borderWidth: 1,
+            borderColor: "#FFF",
+            color: `rgb(200, 200,200)`,
             states: {
                 select: {
                     borderWidth: 2,
@@ -110,9 +110,11 @@ const getOptions = (data, onSelect): Highcharts.Options | {} => {
 interface IMapCasesProps {
     data: ICovidRegionsDailyDataByDate;
     onChangeSelectedRegion: any;
+    status: string;
 }
 
-const RegionsMapCases = ({ data, onChangeSelectedRegion }: IMapCasesProps) => {
+const RegionsMapCases = ({ data, onChangeSelectedRegion, status }: IMapCasesProps) => {
+    const chartRef = useRef(null);
     const statsData = useMemo(() => {
         const dataMapped: {}[] = [];
         for (const [regionName, d] of Object.entries(data)) {
@@ -129,11 +131,20 @@ const RegionsMapCases = ({ data, onChangeSelectedRegion }: IMapCasesProps) => {
         }
         return dataMapped;
     }, [data]);
+    useEffect(() => {
+        const chart: any = chartRef?.current;
+        if (status !== 'success') {
+            chart.chart.showLoading();
+        } else {
+            chart.chart.hideLoading();
+        }
+    }, [status])
     return <div style={{ width: '100%', margin: 0, padding: 0, }}>
         <HighchartsReact
             highcharts={Highcharts}
             options={getOptions(statsData, onChangeSelectedRegion)}
             constructorType={'mapChart'}
+            ref={chartRef}
         />
     </div>
 }

@@ -12,6 +12,7 @@ export const ACTION_TYPES = {
 const initialState = {
     data: {},
     selectedRegionDailyData: [],
+    selectedRegionStatus: "loading",
     date: YesterDay,
     status: "loading"
 };
@@ -39,13 +40,13 @@ const reducer = (state: RegionDataState = initialState, action: any): RegionData
             return {
                 ...state,
                 selectedRegionDailyData: data,
-                status: "success"
+                selectedRegionStatus: "success"
             };
         }
         case REQUEST(ACTION_TYPES.FetchSelectedRegionDailyData): {
             return {
                 ...state,
-                status: "loading"
+                selectedRegionStatus: "loading"
             }
         }
         case ACTION_TYPES.ChangeDate: {

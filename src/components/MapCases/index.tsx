@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import MapData from "@highcharts/map-collection/custom/british-isles.geo.json"
@@ -128,11 +128,13 @@ interface IMapCasesProps {
     data: ICovidRegionsDailyData;
     onChangeSelectedRegion: any;
     dateIndex: number;
+    status: string;
 }
-const MapCases = ({ data, onChangeSelectedRegion, dateIndex }: IMapCasesProps) => {
+const MapCases = ({ data, onChangeSelectedRegion, dateIndex, status }: IMapCasesProps) => {
+    const chartRef = useRef(null);
     const statsData: { regionName: string, z: number | null, data: ICovidDaily, id: string }[] = [];
-    for (const [regionName, list] of Object.entries(data)) { 
-        const currentElement: ICovidDaily = list && list.length > dateIndex ? list[dateIndex] :( DefaultDailly);
+    for (const [regionName, list] of Object.entries(data)) {
+        const currentElement: ICovidDaily = list && list.length > dateIndex ? list[dateIndex] : (DefaultDailly);
         statsData.push({
             regionName: regionName,
             z: currentElement.CumCases || null,
@@ -140,11 +142,20 @@ const MapCases = ({ data, onChangeSelectedRegion, dateIndex }: IMapCasesProps) =
             id: regionName,
         })
     }
+    useEffect(() => {
+        const chart: any = chartRef?.current;
+        if (status !== 'success') {
+            chart.chart.showLoading();
+        } else {
+            chart.chart.hideLoading();
+        }
+    }, [status])
     return <div style={{ width: '100%', margin: 0, padding: 0, }}>
         <HighchartsReact
             highcharts={Highcharts}
             options={getOptions(statsData, onChangeSelectedRegion)}
             constructorType={'mapChart'}
+            ref={chartRef}
         />
     </div>
 }

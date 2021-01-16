@@ -4,6 +4,7 @@ import { Days2Ago, DefaultDailly, Today, YesterDay } from '../../constants';
 import { ICovidDaily } from '../../types';
 import CustomButton from '../CustomButton';
 import ExtraDetails from '../ExtraDetails';
+import Loader from '../loader';
 import Chart from './Chart';
 
 
@@ -17,13 +18,14 @@ interface IMoreDataProps {
     range: number | string;
     dateIndex: number;
     changeDate: any;
+    status: string;
 }
 const dateLabels = [
     "Today",
     "Yesterday",
     "2 days ago"
 ];
-const MoreDataRegion = ({ regionName, data, changeRange, range, dateIndex, changeDate }: IMoreDataProps) => {
+const MoreDataRegion = ({ regionName, data, changeRange, range, dateIndex, changeDate, status }: IMoreDataProps) => {
     const latest: ICovidDaily = data && data.length > dateIndex ? data[dateIndex] : DefaultDailly;
     const rangeFormatted = range === "all" ? 'all time' : '14 days';
     const dateFormatted = dateLabels[dateIndex];
@@ -49,7 +51,9 @@ const MoreDataRegion = ({ regionName, data, changeRange, range, dateIndex, chang
                 <Grid item xs={12}>
                     <span style={{ color: '#555', fontSize: 12, position: 'relative', top: -20 }}>{"＊ To change the region click on another one in the map"}</span>
                 </Grid>
-                <ExtraDetails data={latest} />
+                <Loader status={status} >
+                    <ExtraDetails data={latest} />
+                </Loader>
             </Grid>
             <Grid container justify='center' alignContent='center' alignItems='center' spacing={4}>
                 <Grid item xs={12} style={{ marginTop: 30 }}>
@@ -65,60 +69,62 @@ const MoreDataRegion = ({ regionName, data, changeRange, range, dateIndex, chang
                         </CustomButton>
                     </ButtonGroup>
                 </Grid>
-                <Grid item md={6} sm={12}>
-                    <Paper variant="elevation" elevation={3} style={{ padding: 10, backgroundColor: '#18181b' }}>
-                        <Typography style={{ padding: 4, color: '#FFF', fontSize: 14, fontFamily: 'Roboto', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: 10 }}>
-                            {`New Cases over time (${rangeFormatted}) in `} <span style={{ color: "rgb(253 241 95)", fontWeight: 'bold' }}>{regionName}</span>
-                        </Typography>
-                        <div style={{ width: '100%' }}>
-                            <Chart regionName={regionName} range={range} name="New Cases" data={data ? data.map((d) => [d.Date, d.NewCases]) : []} />
-                        </div>
-                        <Sep />
-                        <Typography style={{ padding: 4, color: '#FFF', fontSize: 14, fontFamily: 'Roboto', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: 10 }}>
-                            {`Accumulate Cases over time (${rangeFormatted}) in `} <span style={{ color: "rgb(253 241 95)", fontWeight: 'bold' }}>{regionName}</span>
-                        </Typography>
-                        <div style={{ width: '100%' }}>
-                            <Chart regionName={regionName} range={range} name="Cases" data={data ? data.map((d) => [d.Date, d.CumCases]) : []} />
-                        </div>
-                    </Paper>
-                </Grid>
-                <Grid item md={6} sm={12} >
-                    <Paper variant="elevation" elevation={3} style={{ padding: 10, backgroundColor: '#18181b' }}>
-                        <Typography style={{ padding: 4, color: '#FFF', fontSize: 14, fontFamily: 'Roboto', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: 10 }}>
-                            {`Deaths over time (${rangeFormatted}) in `} <span style={{ color: "rgb(253 241 95)", fontWeight: 'bold' }}>{regionName}</span>
-                        </Typography>
-                        <div style={{ width: '100%' }}>
-                            <Chart regionName={regionName} range={range} name="New Deaths" data={data ? data.map((d) => [d.Date, d.NewDeaths]) : []} />
-                        </div>
-                        <Sep />
-                        <Typography style={{ padding: 4, color: '#FFF', fontSize: 14, fontFamily: 'Roboto', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: 10 }}>
-                            {`Accumulate Deaths over time (${rangeFormatted}) in `} <span style={{ color: "rgb(253 241 95)", fontWeight: 'bold' }}>{regionName}</span>
-                        </Typography>
-                        <div style={{ width: '100%' }}>
-                            <Chart regionName={regionName} range={range} name="Deaths" data={data ? data.map((d) => [d.Date, d.CumDeaths]) : []} />
-                        </div>
-                    </Paper>
-                </Grid>
-                <Grid item md={6} sm={12} >
-                    <Paper variant="elevation" elevation={3} style={{ padding: 10, backgroundColor: '#18181b' }}>
-                        <Typography style={{ padding: 4, color: '#FFF', fontSize: 14, fontFamily: 'Roboto', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: 10 }}>
-                            {`Recovered over time (${rangeFormatted}) in `} <span style={{ color: "rgb(253 241 95)", fontWeight: 'bold' }}>{regionName}</span>
-                        </Typography>
-                        <div style={{ width: '100%' }}>
-                            <Chart regionName={regionName} range={range} name="Recovered" data={data ? data.map((d) => [d.Date, d.Recovered]) : []} />
-                        </div>
-                    </Paper>
-                </Grid>
-                <Grid item md={6} sm={12} >
-                    <Paper variant="elevation" elevation={3} style={{ padding: 10, backgroundColor: '#18181b' }}>
-                        <Typography style={{ padding: 4, color: '#FFF', fontSize: 14, fontFamily: 'Roboto', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: 10 }}>
-                            {`Active cases over time (${rangeFormatted}) in `} <span style={{ color: "rgb(253 241 95)", fontWeight: 'bold' }}>{regionName}</span>
-                        </Typography>
-                        <div style={{ width: '100%' }}>
-                            <Chart regionName={regionName} range={range} name="Active Cases" data={data ? data.map((d) => [d.Date, d.ActiveCases]) : []} />
-                        </div>
-                    </Paper>
-                </Grid>
+                <Loader status={status} >
+                    <Grid item md={6} sm={12}>
+                        <Paper variant="elevation" elevation={3} style={{ padding: 10, backgroundColor: '#18181b' }}>
+                            <Typography style={{ padding: 4, color: '#FFF', fontSize: 14, fontFamily: 'Roboto', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: 10 }}>
+                                {`New Cases over time (${rangeFormatted}) in `} <span style={{ color: "rgb(253 241 95)", fontWeight: 'bold' }}>{regionName}</span>
+                            </Typography>
+                            <div style={{ width: '100%' }}>
+                                <Chart regionName={regionName} range={range} name="New Cases" data={data ? data.map((d) => [d.Date, d.NewCases]) : []} />
+                            </div>
+                            <Sep />
+                            <Typography style={{ padding: 4, color: '#FFF', fontSize: 14, fontFamily: 'Roboto', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: 10 }}>
+                                {`Accumulate Cases over time (${rangeFormatted}) in `} <span style={{ color: "rgb(253 241 95)", fontWeight: 'bold' }}>{regionName}</span>
+                            </Typography>
+                            <div style={{ width: '100%' }}>
+                                <Chart regionName={regionName} range={range} name="Cases" data={data ? data.map((d) => [d.Date, d.CumCases]) : []} />
+                            </div>
+                        </Paper>
+                    </Grid>
+                    <Grid item md={6} sm={12} >
+                        <Paper variant="elevation" elevation={3} style={{ padding: 10, backgroundColor: '#18181b' }}>
+                            <Typography style={{ padding: 4, color: '#FFF', fontSize: 14, fontFamily: 'Roboto', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: 10 }}>
+                                {`Deaths over time (${rangeFormatted}) in `} <span style={{ color: "rgb(253 241 95)", fontWeight: 'bold' }}>{regionName}</span>
+                            </Typography>
+                            <div style={{ width: '100%' }}>
+                                <Chart regionName={regionName} range={range} name="New Deaths" data={data ? data.map((d) => [d.Date, d.NewDeaths]) : []} />
+                            </div>
+                            <Sep />
+                            <Typography style={{ padding: 4, color: '#FFF', fontSize: 14, fontFamily: 'Roboto', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: 10 }}>
+                                {`Accumulate Deaths over time (${rangeFormatted}) in `} <span style={{ color: "rgb(253 241 95)", fontWeight: 'bold' }}>{regionName}</span>
+                            </Typography>
+                            <div style={{ width: '100%' }}>
+                                <Chart regionName={regionName} range={range} name="Deaths" data={data ? data.map((d) => [d.Date, d.CumDeaths]) : []} />
+                            </div>
+                        </Paper>
+                    </Grid>
+                    <Grid item md={6} sm={12} >
+                        <Paper variant="elevation" elevation={3} style={{ padding: 10, backgroundColor: '#18181b' }}>
+                            <Typography style={{ padding: 4, color: '#FFF', fontSize: 14, fontFamily: 'Roboto', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: 10 }}>
+                                {`Recovered over time (${rangeFormatted}) in `} <span style={{ color: "rgb(253 241 95)", fontWeight: 'bold' }}>{regionName}</span>
+                            </Typography>
+                            <div style={{ width: '100%' }}>
+                                <Chart regionName={regionName} range={range} name="Recovered" data={data ? data.map((d) => [d.Date, d.Recovered]) : []} />
+                            </div>
+                        </Paper>
+                    </Grid>
+                    <Grid item md={6} sm={12} >
+                        <Paper variant="elevation" elevation={3} style={{ padding: 10, backgroundColor: '#18181b' }}>
+                            <Typography style={{ padding: 4, color: '#FFF', fontSize: 14, fontFamily: 'Roboto', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: 10 }}>
+                                {`Active cases over time (${rangeFormatted}) in `} <span style={{ color: "rgb(253 241 95)", fontWeight: 'bold' }}>{regionName}</span>
+                            </Typography>
+                            <div style={{ width: '100%' }}>
+                                <Chart regionName={regionName} range={range} name="Active Cases" data={data ? data.map((d) => [d.Date, d.ActiveCases]) : []} />
+                            </div>
+                        </Paper>
+                    </Grid>
+                </Loader>
             </Grid>
         </Grid>
     </Container>

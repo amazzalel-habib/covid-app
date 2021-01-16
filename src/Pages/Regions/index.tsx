@@ -12,13 +12,24 @@ import { ICovidDaily, ICovidRegionsDailyDataByDate } from "../../types";
 
 
 export default function Regions() {
-    const { regionData, selectedRegionData, date }: { selectedRegionData: ICovidDaily[], regionData: ICovidRegionsDailyDataByDate,date: Date } = useSelector((state: IRootState) => ({
+    const { regionData, selectedRegionData, date, regionStatus, selectedRegionStatus }: { selectedRegionStatus: string, regionStatus: string, selectedRegionData: ICovidDaily[], regionData: ICovidRegionsDailyDataByDate, date: Date } = useSelector((state: IRootState) => ({
         regionData: state.regionData.data,
+        regionStatus: state.regionData.status,
+        selectedRegionStatus: state.regionData.selectedRegionStatus,
         selectedRegionData: state.regionData.selectedRegionDailyData,
         date: state.regionData.date,
     }))
     const [selectedRegion, setSelectedRegion] = useState<string>("Hackney and City of London");
     const [range, setRange] = useState<string | number>(14);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        setTimeout(() => dispatch(fetchAllRegionsDailyDataAction(date)), 0);
+    }, [dispatch, date]);
+    const areaCode = regionData[selectedRegion]?.AreaCode || 'E09000012';
+    useEffect(() => {
+        setTimeout(() => dispatch(fetchSelectedRegionDailyDataAction(areaCode)), 0);
+    }, [dispatch, selectedRegion, areaCode]);
+
     const onChangeSelect = (newSelect) => {
         if (newSelect === selectedRegion) {
             setSelectedRegion("England");
@@ -29,14 +40,6 @@ export default function Regions() {
     const changeDate = (newDate: Date) => {
         dispatch(changeDailyDateAction(newDate));
     }
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(fetchAllRegionsDailyDataAction(date));
-    }, [dispatch, date]);
-    const areaCode = regionData[selectedRegion]?.AreaCode || 'E09000012';
-    useEffect(() => {
-        dispatch(fetchSelectedRegionDailyDataAction(areaCode));
-    }, [dispatch, selectedRegion, areaCode]);
 
     const regionDataSplited = useMemo(() => {
         if (range === "all") {
@@ -61,9 +64,9 @@ export default function Regions() {
                 </CustomButton>
             </ButtonGroup>
         </div>
-        <RegionsMapCases onChangeSelectedRegion={onChangeSelect} data={regionData} />
+        <RegionsMapCases status={regionStatus} onChangeSelectedRegion={onChangeSelect} data={regionData} />
         <div style={{ backgroundColor: '#1f2124', width: '100%', padding: '1rem' }}>
-            <MoreDataRegion changeDate={changeDate}   dateIndex={dateIndex} changeRange={setRange} regionName={selectedRegion} range={range} data={regionDataSplited} />
+            <MoreDataRegion status={selectedRegionStatus} changeDate={changeDate} dateIndex={dateIndex} changeRange={setRange} regionName={selectedRegion} range={range} data={regionDataSplited} />
         </div>
     </Grid>
 }
