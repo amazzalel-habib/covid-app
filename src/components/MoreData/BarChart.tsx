@@ -25,7 +25,8 @@ const BarChart = ({ femaleData, maleData }: IChartProps) => {
         caption: undefined,
         chart: {
             backgroundColor: "none",
-            type: 'column'
+            type: 'column',
+            width: null,
         },
         credits: {
             enabled: false
