@@ -26,7 +26,6 @@ const getOptions = (data, onSelect): Highcharts.Options | {} => {
             allowPointSelect: true,
             borderWidth: 1,
             borderColor: "#FFF",
-            color: `rgb(200, 200,200)`,
             states: {
                 select: {
                     borderWidth: 2,
@@ -66,6 +65,39 @@ const getOptions = (data, onSelect): Highcharts.Options | {} => {
         title: {
             text: ''
         },
+        colorAxis: {
+            dataClasses: [{
+                name: "No Data for the specified date",
+                to: 0
+            }, {
+                from: 0,
+                to: 1000
+            }, {
+                from: 1000,
+                to: 10000
+            }, {
+                from: 10000,
+                to: 20000
+            }, {
+                from: 20000,
+                to: 30000
+            },
+            {
+                from: 30000,
+                to: 40000
+            },
+            {
+                from: 40000,
+                to: 50000
+            },
+            {
+                from: 50000,
+                to: 60000
+            },
+            {
+                from: 50000,
+            }]
+        },
         tooltip: {
             crosshairs: [false],
             backgroundColor: null,
@@ -101,7 +133,30 @@ const getOptions = (data, onSelect): Highcharts.Options | {} => {
             enabled: false
         },
         legend: {
-            enabled: false,
+            title: {
+                text: 'Number of cases',
+                style: {
+                    color: ( // theme
+                        Highcharts.defaultOptions &&
+                        Highcharts.defaultOptions.legend &&
+                        Highcharts.defaultOptions.legend.title &&
+                        Highcharts.defaultOptions.legend.title.style &&
+                        Highcharts.defaultOptions.legend.title.style.color
+                    ) || 'black'
+                }
+            },
+            align: 'left',
+            verticalAlign: 'bottom',
+            floating: true,
+            layout: 'vertical',
+            valueDecimals: 0,
+            backgroundColor: ( // theme
+                Highcharts.defaultOptions &&
+                Highcharts.defaultOptions.legend &&
+                Highcharts.defaultOptions.legend.backgroundColor
+            ) || 'rgba(255, 255, 255, 0.85)',
+            symbolRadius: 0,
+            symbolHeight: 14
         },
         series: data ? series : [series[0]]
     }
@@ -125,6 +180,7 @@ const RegionsMapCases = ({ data, onChangeSelectedRegion, status }: IMapCasesProp
                 CumCases: d?.CumCases || null,
                 ActiveCases: d?.ActiveCases || null,
                 AreaName: regionName,
+                value: d?.CumCases || null,
                 Date: d?.Date || new Date(),
                 id: regionName,
             })

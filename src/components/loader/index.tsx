@@ -24,7 +24,7 @@ interface LoaderProps {
     Wrapper?: any;
     children: any;
 }
-const Alert = ({ message }) => {
+export const Alert = ({ message }) => {
     const [open, setOpen] = useState(true);
     const handleClose = () => {
         setOpen(false);

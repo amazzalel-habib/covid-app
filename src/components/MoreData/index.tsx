@@ -6,6 +6,7 @@ import { ICountryData, ICovidDaily } from '../../types';
 import CustomButton from '../CustomButton';
 import ExtraDetails from '../ExtraDetails';
 import Loader from '../loader';
+import BarChart from './BarChart';
 import Chart from './Chart';
 import UKAndIrelandChart from './UKAndIrelandChart';
 
@@ -183,6 +184,16 @@ const MoreData = ({ regionName, data, changeRange, range, ukData, irelandData, d
                     </ButtonGroup>
                 </Grid>
                 <Loader status={nationStatus} >
+                    <Grid item md={12} sm={12}>
+                        {(latest?.FemaleCases && latest?.MaleCases && latest?.FemaleCases.length !== 0 && latest?.MaleCases.length !== 0) && <Paper variant="elevation" elevation={3} style={{ padding: 10, backgroundColor: '#18181b', width: '100%' }}>
+                            <Typography style={{ padding: 4, color: '#FFF', fontSize: 14, fontFamily: 'Roboto', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: 10 }}>
+                                {`Cases by age and gender (${rangeFormatted}) in `} <span style={{ color: "rgb(253 241 95)", fontWeight: 'bold' }}>{regionName}</span>
+                            </Typography>
+                            <div style={{ width: '100%' }}>
+                                <BarChart maleData={latest?.MaleCases ? latest?.MaleCases : []} femaleData={latest?.FemaleCases ? latest?.FemaleCases : []} />
+                            </div>
+                        </Paper>}
+                    </Grid>
                     <Grid item md={6} sm={12}>
                         <Paper variant="elevation" elevation={3} style={{ padding: 10, backgroundColor: '#18181b', width: '100%' }}>
                             <Typography style={{ padding: 4, color: '#FFF', fontSize: 14, fontFamily: 'Roboto', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: 10 }}>

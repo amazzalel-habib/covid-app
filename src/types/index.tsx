@@ -9,9 +9,12 @@ export interface ICovidDaily {
     AreaType: string,
     AreaName: string,
     AreaCode: string,
+    FemaleCases?: CasesByAge[] | null,
+    MaleCases?: CasesByAge[] | null,
     CumCasesBySpecimenDateRate?: number | null,
     CumCasesBySpecimenDate?: number | null,
     NewCasesBySpecimenDate?: number | null,
+    CumAdmissionsByAge?: any | null,
     CumTestsByPublishDate?: number | null,
     HospitalCases?: number | null,
     NewTestsByPublishDate?: number | null,
@@ -24,7 +27,11 @@ export interface ICovidDaily {
     CumDeaths28DaysByDeathDate?: number | null,
     CumDeaths28DaysByDeathDateRate?: number | null
 }
-
+export interface CasesByAge {
+    age: string;
+    rate: number;
+    value: number;
+}
 export interface ICovidRegionsDailyData {
     [regionName: string]: ICovidDaily[] | null;
 }
@@ -76,12 +83,13 @@ export interface IUKData {
     cumCasesBySpecimenDateRate: number | null,
     cumCasesBySpecimenDate: number | null,
     newCasesBySpecimenDate: number | null,
-    maleCases: number | null,
-    femaleCases: number | null,
+    maleCases: any | null,
+    femaleCases: any | null,
     newAdmissions: number | null,
     cumAdmissions: number | null,
     cumTestsByPublishDate: number | null,
     hospitalCases: number | null,
+    cumAdmissionsByAge: any | null,
     newTestsByPublishDate: number | null,
     covidOccupiedMVBeds: number | null,
     plannedCapacityByPublishDate: number | null,

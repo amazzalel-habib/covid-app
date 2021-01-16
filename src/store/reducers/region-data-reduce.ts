@@ -1,5 +1,5 @@
 import { fetchAllRegionsDailyDataByDate, fetchRegionDailyDataByAreaCode } from "../../api/fetch-region";
-import { YesterDay } from "../../constants";
+import { Today } from "../../constants";
 import { ICovidDaily, ICovidRegionsDailyDataByDate } from "../../types";
 import { FAILURE, REQUEST, SUCCESS } from "./action-type.util";
 
@@ -13,7 +13,7 @@ const initialState = {
     data: {},
     selectedRegionDailyData: [],
     selectedRegionStatus: "loading",
-    date: YesterDay,
+    date: Today,
     status: "loading"
 };
 
