@@ -2,7 +2,7 @@ import { ButtonGroup, Grid } from "@material-ui/core";
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CustomButton from "../../components/CustomButton";
-import MapCases from "../../components/MapCases";
+import MapCases from "../../components/NationsMapCases";
 import MoreData from "../../components/MoreData";
 import { Days2Ago, Today, YesterDay } from "../../constants";
 import { IRootState } from "../../store/reducers";
