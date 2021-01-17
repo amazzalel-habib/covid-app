@@ -1,18 +1,13 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import { ICovidRegionsDailyDataByDate } from "../../types";
-import moment from "moment";
 import Loader from "../loader";
+import { Paper } from "@material-ui/core";
 
 require("highcharts/modules/map")(Highcharts);
 
-function formatOnEmpty(value?: number | null): string {
-    if (value && value > 0) {
-        return `${value}`;
-    }
-    return "#";
-}
+
 const getOptions = (data, onSelect, mapData): Highcharts.Options | {} => {
     const series: Array<Highcharts.SeriesOptionsType | {}> = [
         {
@@ -67,35 +62,55 @@ const getOptions = (data, onSelect, mapData): Highcharts.Options | {} => {
         },
         colorAxis: {
             dataClasses: [{
-                name: "No Data for the specified date",
+                name: "No Data",
                 to: 0
             }, {
                 from: 0,
+                to: 100
+            }, {
+                from: 100,
+                to: 200
+            }, {
+                from: 200,
+                to: 300
+            }, {
+                from: 300,
+                to: 400
+            },
+            {
+                from: 400,
+                to: 500
+            },
+            {
+                from: 500,
+                to: 600
+            },
+            {
+                from: 600,
+                to: 700
+            },
+            {
+                from: 700,
+                to: 800
+            },
+            {
+                from: 800,
+                to: 900
+            },
+            {
+                from: 900,
                 to: 1000
-            }, {
+            },
+            {
                 from: 1000,
-                to: 10000
-            }, {
-                from: 10000,
-                to: 20000
-            }, {
-                from: 20000,
-                to: 30000
+                to: 2000
             },
             {
-                from: 30000,
-                to: 40000
+                from: 2000,
+                to: 3000
             },
             {
-                from: 40000,
-                to: 50000
-            },
-            {
-                from: 50000,
-                to: 60000
-            },
-            {
-                from: 50000,
+                from: 3000,
             }]
         },
         tooltip: {
@@ -111,21 +126,17 @@ const getOptions = (data, onSelect, mapData): Highcharts.Options | {} => {
             formatter() {
                 const { point }: any = this;
                 return `<div class='mapTooltip'>
-                <div class='mapTooltip-name'>${point.AreaName}:</div> <ul>
-                <li><span class='mapTooltip-value'>${formatOnEmpty(point.CumCases)}</span> <b>Cases</b></li>
-                <li><span class='mapTooltip-value'>${formatOnEmpty(point.ActiveCases)}</span> <b>Active Cases</b></li>
-                <li><span class='mapTooltip-value'>${formatOnEmpty(point.CumDeaths)}</span> <b>Deaths</b></li>
-                </ul>
-                <div class='mapTooltip-date'>${moment(point.Date).format("DD MMM YYYY")}</div>
-                <div class='mapTooltip-note'># = Data not available</div>
+                <div class='mapTooltip-name'>${point.AreaName}:</div>
+                <div>Click to load data</div>
                 </div>`;
             }
         },
         mapNavigation: {
             enabled: true,
             buttonOptions: {
-                verticalAlign: 'middle',
-                alignTo: 'plotBox',
+
+                verticalAlign: 'top',
+                alignTo: 'spacingBox',
                 align: 'right'
             }
         },
@@ -134,7 +145,7 @@ const getOptions = (data, onSelect, mapData): Highcharts.Options | {} => {
         },
         legend: {
             title: {
-                text: 'Number of cases',
+                text: 'Number of new cases',
                 style: {
                     color: ( // theme
                         Highcharts.defaultOptions &&
@@ -145,7 +156,7 @@ const getOptions = (data, onSelect, mapData): Highcharts.Options | {} => {
                     ) || 'black'
                 }
             },
-            align: 'left',
+            align: 'right',
             verticalAlign: 'bottom',
             floating: true,
             layout: 'vertical',
@@ -166,23 +177,25 @@ interface IMapCasesProps {
     data: ICovidRegionsDailyDataByDate;
     onChangeSelectedRegion: any;
     status: string;
+    mapData: any;
+    selectedRegion: string;
+    selectedRegionStatus: string;
+    cases: string;
+    deaths: string;
+    casesRate: string;
+    deathRate: string;
 }
 
-const RegionsMapCases = ({ data, onChangeSelectedRegion, status }: IMapCasesProps) => {
+const RegionsMapCases = ({ data, onChangeSelectedRegion, status, mapData, cases, deaths, selectedRegion, casesRate, deathRate, selectedRegionStatus }: IMapCasesProps) => {
     const chartRef = useRef(null);
-    const [mapData, setMapData] = useState<any>(null);
     const statsData = useMemo(() => {
         const dataMapped: {}[] = [];
         for (const [regionName, d] of Object.entries(data)) {
             dataMapped.push({
                 regionCode: d?.AreaCode || '',
-                z: d?.CumCases || null,
-                CumDeaths: d?.CumDeaths || null,
-                CumCases: d?.CumCases || null,
-                ActiveCases: d?.ActiveCases || null,
+                z: d?.NewCases || null,
                 AreaName: regionName,
-                value: d?.CumCases || null,
-                Date: d?.Date || new Date(),
+                value: d?.NewCases || null,
                 id: regionName,
             })
         }
@@ -196,20 +209,25 @@ const RegionsMapCases = ({ data, onChangeSelectedRegion, status }: IMapCasesProp
             chart.chart.hideLoading();
         }
     }, [status]);
-    useEffect(() => {
-        (async function () {
-            const mapD = await import('../../utla-geojson.json');
-            setMapData(mapD.default);
-        })();
-    }, []);
+
     return <div style={{ width: '100%', margin: 0, padding: 0, minHeight: 500 }}>
+        <Paper variant="elevation" elevation={3} style={{ padding: 10, backgroundColor: '#1F1F1F', color: "#EEE", position: 'absolute', display: 'inline-block', zIndex: 1, margin: 10 }}>
+            <Loader status={selectedRegionStatus}>
+                <div style={{ color: "#F5F577", fontWeight: "bold", textTransform: 'uppercase', fontSize: 18 }}>{selectedRegion}</div>
+                <div style={{ fontSize: 12 }}>Cases: <span style={{ color: "#F5F577" }}>{cases}</span></div>
+                <div style={{ fontSize: 12 }}>Rate of cumulative cases per 100k resident population: <span style={{ color: "#F5F577" }}>{casesRate}</span></div>
+                <div style={{ fontSize: 12 }}>Rate of cumulative deaths per 100k resident population: <span style={{ color: "#F5F577" }}>{deathRate}</span></div>
+            </Loader>
+        </Paper>
         <Loader status={mapData ? 'success' : 'loading'}>
             <HighchartsReact
-            highcharts={Highcharts}
-            options={getOptions(statsData, onChangeSelectedRegion, mapData)}
-            constructorType={'mapChart'}
-            ref={chartRef}
-        /></Loader>
+                highcharts={Highcharts}
+                options={getOptions(statsData, onChangeSelectedRegion, mapData)}
+                constructorType={'mapChart'}
+                ref={chartRef}
+            />
+        </Loader>
+
     </div>
 }
 

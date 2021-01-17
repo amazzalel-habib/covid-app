@@ -47,13 +47,14 @@ interface IMoreDataProps {
     changeDate: any;
     countryStatus: string;
     nationStatus: string;
+    selectedNationData: ICovidDaily[] | null;
 }
 const dateLabels = [
     "Today",
     "Yesterday",
     "2 days ago"
 ];
-const MoreData = ({ regionName, data, changeRange, range, ukData, irelandData, dateIndex, changeDate, countryStatus, nationStatus }: IMoreDataProps) => {
+const MoreData = ({ regionName, data, changeRange, range, ukData, irelandData, dateIndex, changeDate, countryStatus, nationStatus, selectedNationData }: IMoreDataProps) => {
     const classes = useStyles();
     const [ShowCountriesExtra, setShowCountriesExtra] = useState(false);
     const latest: ICovidDaily = data && data.length > dateIndex ? data[dateIndex] : DefaultDailly;
@@ -166,7 +167,7 @@ const MoreData = ({ regionName, data, changeRange, range, ukData, irelandData, d
                     <span style={{ color: '#555', fontSize: 12, position: 'relative', top: -20 }}>{"＊ To change the region click on another one in the map"}</span>
                 </Grid>
                 <Loader status={nationStatus} >
-                    <ExtraDetails data={latest} />
+                    {regionName !== 'Ireland' && <ExtraDetails selectedNationData={selectedNationData} data={latest} />}
                 </Loader>
             </Grid>
             <Grid container justify='center' alignContent='center' alignItems='center' spacing={4}>

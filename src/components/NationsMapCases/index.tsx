@@ -99,7 +99,6 @@ const getOptions = (data, onSelect): Highcharts.Options | {} => {
                 <li><span class='mapTooltip-value'>${formatOnEmpty(data.NewCases)}</span> <b>New Cases</b></li>
                 <li><span class='mapTooltip-value'>${formatOnEmpty(data.CumDeaths)}</span> <b>Deaths</b></li>
                 <li><span class='mapTooltip-value'>${formatOnEmpty(data.NewDeaths)}</span> <b>New Deaths</b></li>
-                <li><span class='mapTooltip-value'>${formatOnEmpty(data.Recovered)}</span> <b>Recovered</b></li>
                 </ul>
                 <div class='mapTooltip-date'>${moment(data.Date).format("DD MMM YYYY")}</div>
                 <div class='mapTooltip-note'># = Data not available</div>

@@ -1,19 +1,16 @@
 import { fetchAllRegionsDailyDataByDate, fetchRegionDailyDataByAreaCode } from "../../api/fetch-region";
-import { Today } from "../../constants";
 import { ICovidDaily, ICovidRegionsDailyDataByDate } from "../../types";
 import { FAILURE, REQUEST, SUCCESS } from "./action-type.util";
 
 export const ACTION_TYPES = {
     FetchAllRegionsData: 'RegionData/FetchAllRegionsData',
     FetchSelectedRegionDailyData: 'RegionData/FetchSelectedRegionDailyData',
-    ChangeDate: 'RegionData/ChangeDate',
 };
 
 const initialState = {
     data: {},
     selectedRegionDailyData: [],
     selectedRegionStatus: "loading",
-    date: Today,
     status: "loading"
 };
 
@@ -47,13 +44,6 @@ const reducer = (state: RegionDataState = initialState, action: any): RegionData
             return {
                 ...state,
                 selectedRegionStatus: "loading"
-            }
-        }
-        case ACTION_TYPES.ChangeDate: {
-            const { date } = action.payload;
-            return {
-                ...state,
-                date: date
             }
         }
         default:
@@ -96,8 +86,3 @@ export const fetchSelectedRegionDailyDataAction = (areaCode: string) => async (d
         })
     }
 };
-
-export const changeDailyDateAction = (newDate: Date) => ({
-    type: ACTION_TYPES.ChangeDate,
-    payload: { date: newDate },
-})

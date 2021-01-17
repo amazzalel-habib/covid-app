@@ -12,10 +12,6 @@ const useStyles = makeStyles((theme: Theme) =>
             alignContent: "center",
             alignItems: "center",
             width: '100%',
-            padding: "4rem 0 0rem 0",
-            '& > * + *': {
-                marginLeft: theme.spacing(2),
-            },
         },
     }),
 );

@@ -64,7 +64,7 @@ export default function Home() {
         </div>
         <MapCases status={nationStatus} dateIndex={dateIndex} onChangeSelectedRegion={onChangeSelect} data={nationData} />
         <div style={{ backgroundColor: '#1f2124', width: '100%', padding: '1rem' }}>
-            <MoreData countryStatus={countryStatus} nationStatus={nationStatus} changeDate={changeDate} irelandData={ireland} dateIndex={dateIndex} ukData={uk} changeRange={setRange} regionName={selectedNation} range={range} data={nationDataSplited} />
+            <MoreData countryStatus={countryStatus} nationStatus={nationStatus} changeDate={changeDate} irelandData={ireland} dateIndex={dateIndex} ukData={uk} changeRange={setRange} regionName={selectedNation} range={range} data={nationDataSplited} selectedNationData={selectedNationData} />
         </div>
     </Grid>
 }

@@ -1,9 +1,8 @@
 import { ButtonGroup, Container, Grid, Paper, Typography } from '@material-ui/core';
 import React from 'react';
-import { Days2Ago, DefaultDailly, Today, YesterDay } from '../../constants';
 import { ICovidDaily } from '../../types';
 import CustomButton from '../CustomButton';
-import ExtraDetails from '../ExtraDetails';
+import ExtraDetailsWithLatest from '../ExtraDetailsWithLatest';
 import Loader from '../loader';
 import Chart from './Chart';
 
@@ -16,43 +15,24 @@ interface IMoreDataProps {
     data: ICovidDaily[] | null;
     changeRange: any;
     range: number | string;
-    dateIndex: number;
-    changeDate: any;
     status: string;
 }
-const dateLabels = [
-    "Today",
-    "Yesterday",
-    "2 days ago"
-];
-const MoreDataRegion = ({ regionName, data, changeRange, range, dateIndex, changeDate, status }: IMoreDataProps) => {
-    const latest: ICovidDaily = data && data.length > dateIndex ? data[dateIndex] : DefaultDailly;
+
+const MoreDataRegion = ({ regionName, data, changeRange, range, status }: IMoreDataProps) => {
     const rangeFormatted = range === "all" ? 'all time' : '14 days';
-    const dateFormatted = dateLabels[dateIndex];
     return <Container>
         <Grid container>
             <Grid container >
                 <Grid item xs={12} container alignContent='center' justify='space-between' style={{ marginBottom: 20 }}>
                     <Typography style={{ padding: 4, color: '#FFF', fontSize: 20, fontFamily: 'Roboto', fontWeight: 500, textTransform: 'uppercase' }}>
-                        {"CORONAVIRUS (COVID-19) OVERVIEW  IN "}<span style={{ color: "#ffed07", fontWeight: 'bold' }}>{regionName}</span> {`(${dateFormatted})`}
+                        {"CORONAVIRUS (COVID-19) OVERVIEW  IN "}<span style={{ color: "#ffed07", fontWeight: 'bold' }}>{regionName}</span>
                     </Typography>
-                    <ButtonGroup color="inherit" variant="text" size="small">
-                        <CustomButton disabled={dateIndex === 2} color="inherit" onClick={() => changeDate(Days2Ago)} size="small">
-                            {"Last 2 days"}
-                        </CustomButton>
-                        <CustomButton disabled={dateIndex === 1} color="inherit" onClick={() => changeDate(YesterDay)} size="small">
-                            {"Yesterday"}
-                        </CustomButton>
-                        <CustomButton disabled={dateIndex === 0} color="inherit" onClick={() => changeDate(Today)} size="small">
-                            {"Today"}
-                        </CustomButton>
-                    </ButtonGroup>
                 </Grid>
                 <Grid item xs={12}>
                     <span style={{ color: '#555', fontSize: 12, position: 'relative', top: -20 }}>{"＊ To change the region click on another one in the map"}</span>
                 </Grid>
                 <Loader status={status} >
-                    <ExtraDetails data={latest} />
+                    <ExtraDetailsWithLatest data={data} />
                 </Loader>
             </Grid>
             <Grid container justify='center' alignContent='center' alignItems='center' spacing={4}>

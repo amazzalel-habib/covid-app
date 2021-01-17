@@ -10,8 +10,6 @@ export const fetchRegionDailyData = async (regionName: string): Promise<ICovidDa
 }
 
 export const fetchAllRegionsDailyDataByDate = async (date: Date): Promise<ICovidRegionsDailyDataByDate | null> => {
-    //const ireland = await fetchIrelandDailyData(date);
-    //const ir = ireland?.find((d) => isSameDay(new Date(d.Date), date))
     const ukRegions = await fetchUKAreaDailyData('utla', undefined, undefined, date);
     return {
         ...groupeCovidDailyByAreaNameSingleton(ukRegions),

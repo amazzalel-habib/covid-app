@@ -22,7 +22,6 @@ export function mapSingleUKData(d: IUKData): ICovidDaily {
         CumCases: d.cumCasesByPublishDate ? d.cumCasesByPublishDate : null,
         CumDeaths: d.cumDeathsByDeathDate ? d.cumDeathsByDeathDate : null,
         NewDeaths: d.newDeathsByDeathDate ? d.newDeathsByDeathDate : null,
-        Recovered: d.newDeathsByDeathDate ? d.newDeathsByDeathDate : null,
         AreaType: d.areaType,
         AreaName: d.areaName,
         AreaCode: d.areaCode,
@@ -34,6 +33,8 @@ export function mapSingleUKData(d: IUKData): ICovidDaily {
         CumTestsByPublishDate: d.cumTestsByPublishDate,
         HospitalCases: d.hospitalCases,
         CumAdmissionsByAge: d.cumAdmissionsByAge,
+        CumAdmissions:d.cumAdmissions,
+        NewAdmissions:d.newAdmissions,
         NewTestsByPublishDate: d.newTestsByPublishDate,
         CovidOccupiedMVBeds: d.covidOccupiedMVBeds,
         PlannedCapacityByPublishDate: d.plannedCapacityByPublishDate,
@@ -79,6 +80,8 @@ export const UKDataStructure = {
     "femaleCases": "femaleCases",
     "maleCases": "maleCases",
     "hospitalCases": "hospitalCases",
+    "cumAdmissions": "cumAdmissions",
+    "newAdmissions": "newAdmissions",
     "cumAdmissionsByAge": "cumAdmissionsByAge",
     "newTestsByPublishDate": "newTestsByPublishDate",
     "covidOccupiedMVBeds": "covidOccupiedMVBeds",
@@ -91,7 +94,7 @@ export const UKDataStructure = {
     "cumDeaths28DaysByDeathDateRate": "cumDeaths28DaysByDeathDateRate"
 }
 
-export const fetchUKAreaDailyData = async (areaType: string = 'nation', areaName?: string, areaCode?: string, date?: Date): Promise<ICovidDaily[] | null> => {
+export const fetchUKAreaDailyData = async (areaType: string = 'nation', areaName?: string, areaCode?: string, date?: Date, latestBy?: string): Promise<ICovidDaily[] | null> => {
     const filters = [
         `areaType=${areaType}`,
     ];
@@ -104,11 +107,13 @@ export const fetchUKAreaDailyData = async (areaType: string = 'nation', areaName
     if (date) {
         filters.push(`date=${dateToYMD(date)}`);
     }
-    const apiParams = {
+    const apiParams: any = {
         filters: filters.join(";"),
         structure: JSON.stringify(UKDataStructure),
-        page: 1,
     };
+    if(latestBy){
+        apiParams['latestBy']= latestBy;
+    }
     let { data } = await axios.get(UK_API_URL, {
         params: apiParams,
         timeout: 10000
