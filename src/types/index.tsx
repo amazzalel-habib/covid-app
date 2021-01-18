@@ -15,6 +15,7 @@ export interface ICovidDaily {
     CumCasesBySpecimenDate?: number | null,
     NewCasesBySpecimenDate?: number | null,
     CumAdmissionsByAge?: any | null,
+    PopulationProportionCovidCases?: number | null,
     NewAdmissions?: number | null,
     CumAdmissions?: number | null,
     CumTestsByPublishDate?: number | null,

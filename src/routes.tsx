@@ -7,6 +7,7 @@ import {
 import Home from "./Pages/Home";
 import Layout from "./components/Layout";
 import Regions from "./Pages/Regions";
+import IrelandRegions from "./Pages/IrelandRegions";
 
 
 export default function Routes() {
@@ -19,6 +20,9 @@ export default function Routes() {
                     </Route>
                     <Route exact path="/regions">
                         <Regions />
+                    </Route>
+                    <Route exact path="/ireland">
+                        <IrelandRegions />
                     </Route>
                 </Switch>
             </Layout>
